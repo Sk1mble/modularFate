@@ -209,7 +209,7 @@ class EditTracks extends FormApplication {
         track_label_select.on("change", event => this._on_track_label_select(event, html))
         
         saveTrackButton.on("click", event => this._onSaveTrackButton(event, html));
-        track_select.on("click", event => this._track_selectClick(event, html));
+        track_select.on("change", event => this._track_selectClick(event, html));
         edit_track_name.on("change", event => this._edit_track_name_change(event, html));
         edit_linked_skillsButton.on("click", event => this._edit_linked_skillsButtonClick(event,html));
         deleteTrackButton.on("click",event => this._onDeleteTrackButton(event, html));

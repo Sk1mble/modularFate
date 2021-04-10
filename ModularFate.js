@@ -9,11 +9,11 @@
  *      and licensed for our use under the Creative Commons Attribution 3.0 Unported license
  *      (http://creativecommons.org/licenses/by/3.0/).
  *
- *      This work is based on Fate Condensed (found at http://www.faterpg.com/), a product of Evil Hat Productions, LLC, 
- *      developed, authored, and edited by PK Sullivan, Ed Turner, Leonard Balsera, Fred Hicks, Richard Bellingham, Robert Hanz, Ryan Macklin, 
+ *      This work is based on Fate Condensed (found at http://www.faterpg.com/), a product of Evil Hat Productions, LLC,
+ *      developed, authored, and edited by PK Sullivan, Ed Turner, Leonard Balsera, Fred Hicks, Richard Bellingham, Robert Hanz, Ryan Macklin,
  *      and Sophie Lagacé, and licensed for our use under the Creative Commons Attribution 3.0 Unported license (http://creativecommons.org/licenses/by/3.0/).
  *
- * 
+ *
  * Note to self: New standardised hook signatures:
  * preCreate[documentName](document:Document, data:object, options:object, userId:string) {}
  * create[documentName](document:Document, options:object, userId: string) {}
@@ -46,7 +46,7 @@ Hooks.on("preCreateActor", async (actor, data, options, userId) => {
         if (game.user == game.users.find(e => e.isGM && e.active) || game.user.id === userId){
             if (actor?.data?.data?.details?.fatePoints?.refresh === ""){
                 let modified_data = await initialiseModularFateCharacter(actor);
-                data.data = modified_data.data;            
+                data.data = modified_data.data;
             }
         }
     }
@@ -62,15 +62,15 @@ async function initialiseModularFateCharacter (actor) {
 
     working_data.data.details.fatePoints.refresh = refresh;
     working_data.data.details.fatePoints.current = refresh;
-    
+
     let p_skills=working_data.data.skills;
-    
+
     //Check to see what skills the character has compared to the global skill list
         var skill_list = game.settings.get("ModularFate","skills");
         // This is the number of skills the character has currently.
         //We only need to add any skills if this is currently 0,
-        
-        
+
+
         let skills_to_add = [];
 
         for (let w in skill_list){
@@ -89,7 +89,7 @@ async function initialiseModularFateCharacter (actor) {
                 skill.rank=0;
                 p_skills[skill.name]=skill;
             })
-        }        
+        }
 
         let aspects = game.settings.get("ModularFate", "aspects");
         let player_aspects = duplicate(aspects);
@@ -98,7 +98,7 @@ async function initialiseModularFateCharacter (actor) {
         }
         //Now to store the aspect list to the character
         working_data.data.aspects = player_aspects;
-    
+
         //Step one, get the list of universal tracks.
         let world_tracks = duplicate(game.settings.get("ModularFate", "tracks"));
         let tracks_to_write = working_data.data.tracks;
@@ -129,7 +129,7 @@ async function initialiseModularFateCharacter (actor) {
                 track.aspect.as_name = false;
             }
 
-            //Initialise the box array for this track 
+            //Initialise the box array for this track
             if (track.boxes > 0) {
                 let box_values = [];
                 for (let i = 0; i < track.boxes; i++) {
@@ -140,7 +140,7 @@ async function initialiseModularFateCharacter (actor) {
         }
     working_data.data.tracks = tracks_to_write;
     let tracks = working_data.data.tracks;
-    
+
     let categories = game.settings.get("ModularFate", "track_categories");
     //GO through all the tracks, find the ones with boxes, check the number of boxes and linked skills and initialise as necessary.
     for (let t in tracks) {
@@ -403,9 +403,9 @@ Hooks.once('init', async function () {
         onChange: value => {
             if (value == true && game.user.isGM){
                 let text = ModularFateConstants.exportSettings();
- 
+
                 new Dialog({
-                    title: game.i18n.localize("ModularFate.ExportSettingsDialogTitle"), 
+                    title: game.i18n.localize("ModularFate.ExportSettingsDialogTitle"),
                     content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;" id="export_settings">${text}</textarea></div>`,
                     buttons: {
                     },
@@ -440,7 +440,7 @@ Hooks.once('init', async function () {
         restricted:true,
         default:""
     })
-    
+
     game.settings.register("ModularFate", "gameNotes", {
         name: game.i18n.localize("ModularFate.GameNotes"),
         scope:"world",
@@ -475,7 +475,7 @@ Hooks.once('init', async function () {
         config:true,
         type:Number,
         restricted:true,
-        default:0 
+        default:0
     })
 
     game.settings.register("ModularFate","fuAspectLabelFont", {

@@ -1,5 +1,5 @@
 Hooks.once('init', async function () {
-    //On init, we initialise all settings and settings menus for dealing with skills 
+    //On init, we initialise all settings and settings menus for dealing with skills
     //We will be using this setting to store the world's list of skills.
     game.settings.register("ModularFate", "skills", {
         name: "Skill list",
@@ -101,32 +101,50 @@ Hooks.once('init', async function () {
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCoreDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
                     }
                 }
                 if (value=="clearAll"){
                     if (game.user.isGM) {
                         game.settings.set("ModularFate","skills",{});
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
                     }
                 }
                 if (value=="fateCondensed"){
-                    if (game.user.isGM){ 
+                    if (game.user.isGM){
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateCondensedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.defaultSkillsLabel"));
                     }
                 }
                 if (value=="accelerated"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.FateAcceleratedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
                     }
                 }
                 if (value=="dfa"){
                     if (game.user.isGM){
                         game.settings.set("ModularFate","skills",game.i18n.localize("ModularFate.DresdenFilesAcceleratedDefaultSkills"));
                         game.settings.set("ModularFate","defaultSkills","nothing");
+                        game.settings.set("ModularFate","skillsLabel",game.i18n.localize("ModularFate.FateAcceleratedSkillsLabel"));
                     }
                 }
             }
+    });
+
+    game.settings.register("ModularFate", "skillsLabel", {
+      name: game.i18n.localize("ModularFate.SkillsLabelName"),
+      hint: game.i18n.localize("ModularFate.SkillsLabelHint"),
+      scope: "world",     // This specifies a client-stored setting
+      config: true,        // This specifies that the setting appears in the configuration view
+      type: String,
+      restricted:true,
+      // I tried to set this to game.i18n.localize("ModularFate.defaultSkillsLabel")
+      // but that didn't work for me, so I put code in to check if it's empty,
+      // in the ModularFateCharacterSheet.getData() method.
+      default: "",
     });
 
     game.settings.register("ModularFate","stunts", {
@@ -140,7 +158,7 @@ Hooks.once('init', async function () {
 
     let skill_choices = {};
     let skills = game.settings.get("ModularFate", "skills")
-    
+
     skill_choices["None"]="None";
     skill_choices["Disable"]="Disable";
     for (let skill in skills){skill_choices[skill]=skill};
@@ -181,7 +199,7 @@ class SkillSetup extends FormApplication{
     static get defaultOptions() {
         const options = super.defaultOptions; //begin with the super's default options
         //The HTML file used to render this window
-        options.template = "systems/ModularFate/templates/SkillSetup.html"; 
+        options.template = "systems/ModularFate/templates/SkillSetup.html";
         options.width = "auto";
         options.height = "auto";
         options.title = `${game.i18n.localize("ModularFate.SetupSkillsTitle")} ${game.world.data.title}`;
@@ -198,7 +216,7 @@ class SkillSetup extends FormApplication{
         }
         return templateData;
     }
-    
+
       //Here are the action listeners
       activateListeners(html) {
         super.activateListeners(html);
@@ -220,7 +238,7 @@ class SkillSetup extends FormApplication{
         importSkills.on("click", event => this._onImportSkills(event, html));
         exportSkills.on("click", event => this._onExportSkills(event, html));
     }
-    
+
     //Here are the event listener functions.
 
     async _onExportSkill(event, html){
@@ -228,7 +246,7 @@ class SkillSetup extends FormApplication{
         let slb = html.find("select[id='skillListBox']")[0].value;
         let sk = skills[slb];
         let skill_text = `{"${slb}":${JSON.stringify(sk)}}`
- 
+
         new Dialog({
             title: game.i18n.localize("ModularFate.CopyAndPasteToSaveSkill"),
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skill_text}</textarea></div>`,
@@ -240,9 +258,9 @@ class SkillSetup extends FormApplication{
     async _onExportSkills(event, html){
         let skills = game.settings.get("ModularFate","skills");
         let skills_text = JSON.stringify(skills);
- 
+
         new Dialog({
-            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveSkills"), 
+            title: game.i18n.localize("ModularFate.CopyAndPasteToSaveSkills"),
             content: `<div style="background-color:white; color:black;"><textarea rows="20" style="font-family:Montserrat; width:382px; background-color:white; border:1px solid lightsteelblue; color:black;">${skills_text}</textarea></div>`,
             buttons: {
             },
@@ -298,7 +316,7 @@ class SkillSetup extends FormApplication{
             //Code to delete the selected skill
             //First, get the name of the skill from the HTML element skillListBox
             let slb = html.find("select[id='skillListBox'")[0].value;
-            
+
             //Find that skill in the list of skills
             let skills=game.settings.get("ModularFate","skills");
             if (skills[slb] != undefined){
@@ -372,11 +390,11 @@ class EditSkill extends FormApplication{
                     existing = true;
                 }
             }
-            if (!existing){  
+            if (!existing){
                 if (this.skill.name != ""){
                     //That means the name has been changed. Delete the original aspect and replace it with this one.
                     delete skills[this.skill.name]
-                }                      
+                }
                 skills[name]=newSkill;
             }
             await game.settings.set("ModularFate","skills",skills);
@@ -388,16 +406,16 @@ class EditSkill extends FormApplication{
         const saveButton = html.find("button[id='edit_save_changes']");
         saveButton.on("click", event => this._onSaveButton(event, html));
     }
-        
+
     //Here are the event listener functions.
     async _onSaveButton(event,html){
         this.submit();
-    }    
+    }
 
     static get defaultOptions() {
         const options = super.defaultOptions;
-        options.template = "systems/ModularFate/templates/EditSkill.html"; 
-    
+        options.template = "systems/ModularFate/templates/EditSkill.html";
+
         //Define the FormApplication's options
         options.width = "1000";
         options.height = "auto";

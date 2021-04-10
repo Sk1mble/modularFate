@@ -113,7 +113,7 @@ export class ModularFateCharacter extends ActorSheet {
             skill_name.on("click", event => this._onSkill_name(event, html));
             const sort = html.find("div[name='sort_player_skills'")
             sort.on("click", event => this._onSortButton(event, html));
-            
+
             const aspectButton = html.find("div[name='edit_player_aspects']");
             aspectButton.on("click", event => this._onAspectClick(event, html));
 
@@ -196,7 +196,7 @@ export class ModularFateCharacter extends ActorSheet {
                 let a = event.target.id.split("_")[0];
                 let aspect = this.actor.data.data.aspects[a];
                 let key = this.actor.id+aspect.name+"_aspect";
-        
+
                 if (game.user.expanded == undefined){
                     game.user.expanded = {};
                 }
@@ -215,7 +215,7 @@ export class ModularFateCharacter extends ActorSheet {
                 let t = event.target.id.split("_")[0];
                 let track = this.object.data.data.tracks[t];
                 let key = this.actor.id+track.name+"_track";
-            
+
                 if (game.user.expanded == undefined){
                     game.user.expanded = {};
                 }
@@ -349,7 +349,7 @@ export class ModularFateCharacter extends ActorSheet {
                 this.actor.items.forEach(item => {
                     let key = this.actor.id+item.id+"_extra";
                     game.user.expanded[key] = true;
-                })  
+                })
                 this.render(false);
             })
 
@@ -366,7 +366,7 @@ export class ModularFateCharacter extends ActorSheet {
             })
 
             input.on("focus", event => {
-                
+
                 if (this.editing == false) {
                     this.editing = true;
                 }
@@ -484,7 +484,7 @@ export class ModularFateCharacter extends ActorSheet {
             // Do nothing.
         }
     }
-    
+
     async _on_stunt_roll_click(event,html){
         let items = event.target.id.split("_");
         let name = items[0];
@@ -517,7 +517,7 @@ export class ModularFateCharacter extends ActorSheet {
 
         roll.toMessage({
             flavor: `<h1>${skill}</h1>${game.i18n.localize("ModularFate.RolledBy")}: ${game.user.name}<br>
-            ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})<br> 
+            ${game.i18n.localize("ModularFate.SkillRank")}: ${rank} (${rung})<br>
             ${game.i18n.localize("ModularFate.Stunt")}: ${name} (+${bonus})`,
             speaker: msg
         });
@@ -577,7 +577,7 @@ export class ModularFateCharacter extends ActorSheet {
         let e = new ExtraSheet(item);
         await e.render(true);
 
-    }    
+    }
 
     async _on_extras_delete(event, html){
         let del = await ModularFateConstants.confirmDeletion();
@@ -747,7 +747,7 @@ export class ModularFateCharacter extends ActorSheet {
         if (game.user.expanded[this.actor.id+"_biography"] == undefined) game.user.expanded[this.actor.id+"_biography"] = true;
         if (game.user.expanded[this.actor.id+"_description"] == undefined) game.user.expanded[this.actor.id+"_description"] = true;
         if (game.user.expanded[this.actor.id+"_extras"] == undefined) game.user.expanded[this.actor.id+"_extras"] = true;
-    
+
         // super.getData() now returns an object in this format:
         /*
             {
@@ -771,12 +771,12 @@ export class ModularFateCharacter extends ActorSheet {
 
         sheetData.paidTracks = 0;
         sheetData.paidStunts = 0;
-        sheetData.paidExtras = 0;   
+        sheetData.paidExtras = 0;
 
         sheetData.refreshSpent = 0; //Will increase when we count tracks with the Paid field and stunts.
         sheetData.freeStunts = game.settings.get("ModularFate", "freeStunts");
 
-        //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value        
+        //Calculate cost of stunts here. Some cost more than 1 refresh, so stunts need a cost value
         let tracks = sheetData.data.tracks; // Removed duplicate() here as we don't write to the tracks data, just read from it.
         for (let track in tracks) {
             if (tracks[track].paid) {
@@ -795,7 +795,7 @@ export class ModularFateCharacter extends ActorSheet {
         for (let s in stunts){
             sheetData.paidStunts += parseInt(stunts[s].refresh_cost);
         }
-        
+
         sheetData.paidStunts -= sheetData.freeStunts;
         sheetData.refreshSpent = sheetData.paidTracks + sheetData.paidStunts + sheetData.paidExtras;
 
@@ -815,7 +815,7 @@ export class ModularFateCharacter extends ActorSheet {
             if (checkSpent > worldRefresh) {
                 if (error) {
                     message += game.i18n.localize("ModularFate.AndSpentRefreshPlusRefreshGreaterThanGameRefresh")
-                } 
+                }
                 else {
                     message += game.i18n.localize("ModularFate.SpentRefreshPlusRefreshGreaterThanGameRefresh")
                     error = true;
@@ -844,9 +844,9 @@ export class ModularFateCharacter extends ActorSheet {
             if (ordered_skills[s].extra_tag != undefined){
                 let extra_id = ordered_skills[s].extra_tag.extra_id;
                 let extra = sheetData.items.find(item=>item.id == extra_id);
-        
+
                 if (extra != undefined && extra.data.data.countSkills){
-                    skillTotal += ordered_skills[s].rank;    
+                    skillTotal += ordered_skills[s].rank;
                 }
             }else {
                 skillTotal += ordered_skills[s].rank;
@@ -854,6 +854,9 @@ export class ModularFateCharacter extends ActorSheet {
         }
 
         sheetData.skillTotal = skillTotal;
+
+      let skills_label = game.settings.get("ModularFate", "skillsLabel");
+      sheetData.skillsLabel = skills_label || game.i18n.localize("ModularFate.defaultSkillsLabel");
         sheetData.ladder = ModularFateConstants.getFateLadder();
         sheetData.sortByRank = this.sortByRank;
         sheetData.gameSkillPoints = game.settings.get("ModularFate", "skillTotal")
@@ -867,7 +870,7 @@ export class ModularFateCharacter extends ActorSheet {
         }
         sheetData.track_categories=Array.from(cats);
         sheetData.category = this.track_category;
-    
+
         return sheetData;
     }
 }

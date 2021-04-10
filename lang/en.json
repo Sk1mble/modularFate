@@ -66,6 +66,10 @@
     "ModularFate.Biography":"Biography",
     "ModularFate.Description":"Description",
     "ModularFate.Skills":"Skills",
+    "ModularFate.SkillsLabelName": "Skills label",
+    "ModularFate.SkillsLabelHint": "The label used on the character sheet for the Skills section. If left empty, will default to 'Skills'",
+    "ModularFate.defaultSkillsLabel": "Skills",
+    "ModularFate.FateAcceleratedSkillsLabel": "Approaches",
     "ModularFate.Tracks":"Tracks",
     "ModularFate.clickHereToEditTrackNotes":"Click here to edit the track notes for",
     "ModularFate.Stunts":"Stunts",
@@ -475,7 +479,7 @@
             "attack":"Athletics is not meant as an attack skill.",
             "defend":"Athletics is a catchall skill to roll for defense in a physical conflict, against close quarters and ranged attacks. You can also use it to defend against characters trying to move past you, if you’re in a position to physically interfere with whoever’s making the attempt.",
             "pc":true
-            },    
+            },
         "Burglary":{
             "name":"Burglary","description":"The Burglary skill covers your character’s aptitude for stealing things and getting into places that are off-limits.\nIn genres that rely on the use of a lot of technology, this skill also includes a proficiency in the related tech, allowing the character to hack security systems, disable alarm systems, and whatnot.","overcome":"Burglary allows you to overcome any obstacle related to theft or infiltration. Bypassing locks and traps, pickpocketing and filching, covering your tracks, and other such activities all fall under the purview of this skill.","caa":"You can case a location with Burglary, to determine how hard it will be to break into and what kind of security you’re dealing with, as well as discover any vulnerabilities you might exploit. You can also examine the work of other burglars to determine how a particular heist was done, and create or discover aspects related to whatever evidence they may have left behind.","attack":"Burglary isn’t used for attacks.","defend":"Same here. It’s not really a conflict skill, so there’s not a lot of opportunity to use it to defend.","pc":true
         },

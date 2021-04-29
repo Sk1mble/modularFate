@@ -908,4 +908,3 @@ Handlebars.registerHelper("hasBoxes", function(track) {
         return true;
     }
 });
-

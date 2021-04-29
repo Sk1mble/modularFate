@@ -287,4 +287,18 @@ class ModularFateConstants {
         await game.settings.set("ModularFate","refreshTotal",input.refreshTotal);
         await game.settings.set("ModularFate","track_categories",input.track_categories);
     }
+
+    static async storeSettingsOnUser(){
+        let user = game.user;
+        if (game.user.isGM) {
+            let settings = [];
+            game.settings.settings.forEach(s => {
+                if (s.module == "ModularFate"){
+                    if (!s.key.includes("sheet_template"))
+                    settings.push({key:s.key, data:game.settings.get(s.module, s.key)})
+                }
+            })
+            await game.user.setFlag("world", "oldSettings", settings);
+        }
+    }
 } 
